@@ -1,6 +1,3 @@
-import { journey, step, request } from '@elastic/synthetics';
-
-journey('ABM Server Validation', ({ page }) => {
 step('Fetch and validate ABM servers', async () => {
   const context = await request.newContext();
   const baseUrl = 'https://pysheriff.github.io/abm-mock-service';
@@ -48,5 +45,4 @@ step('Fetch and validate ABM servers', async () => {
   }
 
   console.log(`All ${allURLs.length} ABM servers validated successfully`);
-});
 });
