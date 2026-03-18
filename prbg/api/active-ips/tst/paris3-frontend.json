@@ -1,0 +1,5 @@
+[
+  {"ip_address": "https://pysheriff.github.io/abm-mock-service/servers/frontend1"},
+  {"ip_address": "https://pysheriff.github.io/abm-mock-service/servers/frontend2"},
+  {"ip_address": "https://pysheriff.github.io/abm-mock-service/servers/frontend3"}
+]
