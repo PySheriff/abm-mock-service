@@ -1,14 +1,17 @@
+import { journey, step, request } from '@elastic/synthetics';
+
+journey('ABM Server Validation', ({ page }) => {
 step('Fetch and validate ABM servers', async () => {
-  const request = await playwright.request.newContext();
+  const context = await request.newContext();
   const baseUrl = 'https://pysheriff.github.io/abm-mock-service';
 
   // Fetch frontend URLs
-  const frontendResp = await request.get(`${baseUrl}/prbg/api/active-ips/tst/paris3-frontend.json`);
+  const frontendResp = await context.get(`${baseUrl}/prbg/api/active-ips/tst/paris3-frontend.json`);
   const frontendData = await frontendResp.json();
   const frontendURLs = frontendData.map(item => item.ip_address);
 
   // Fetch backend URLs
-  const backendResp = await request.get(`${baseUrl}/prbg/api/active-ips/tst/paris3-backend.json`);
+  const backendResp = await context.get(`${baseUrl}/prbg/api/active-ips/tst/paris3-backend.json`);
   const backendData = await backendResp.json();
   const backendURLs = backendData.map(item => item.ip_address);
 
@@ -23,7 +26,7 @@ step('Fetch and validate ABM servers', async () => {
     await Promise.allSettled(
       batch.map(async (url) => {
         try {
-          const resp = await request.get(url, { timeout: 5000 });
+          const resp = await context.get(url, { timeout: 5000 });
           const body = await resp.text();
           if (resp.status() === 200 && body.includes('Calc')) {
             console.log(`SUCCESS: ${url}`);
@@ -38,11 +41,12 @@ step('Fetch and validate ABM servers', async () => {
     );
   }
 
-  await request.dispose();
+  await context.dispose();
 
   if (failures.length > 0) {
     throw new Error(`${failures.length} ABM server(s) failed: ${failures.join(', ')}`);
   }
 
   console.log(`All ${allURLs.length} ABM servers validated successfully`);
+});
 });
